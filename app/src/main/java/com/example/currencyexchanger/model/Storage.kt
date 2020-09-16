@@ -1,40 +1,30 @@
 package com.example.currencyexchanger.model
 
-import android.util.Log
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.example.currencyexchanger.model.network.NetworkService
 import com.example.currencyexchanger.model.pojo.ValuteInfo
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
-class Storage {
+class Storage private constructor(){
 
-    private var storage: MutableLiveData<ValuteInfo> = MutableLiveData()
+    private var storage: ValuteInfo? = null
 
-    init {
-        loadValuteInf()
+    fun getData(): ValuteInfo? {
+        if (storage == null) {
+            val deferred = GlobalScope.async {
+                NetworkService.instance
+                    .getAPI()
+                    .getActualValuteInfo()
+            }
+            storage = runBlocking { deferred.await() }
+        }
+        return storage
     }
 
-    fun subscribeObserver(lifecycleOwner: LifecycleOwner, observer: Observer<ValuteInfo>) {
-        storage.observe(lifecycleOwner, observer)
-    }
 
-    private fun loadValuteInf() {
-        NetworkService.instance
-            .getAPI()
-            .getActualValuteInfo()
-            .enqueue(object: Callback<ValuteInfo> {
-                override fun onResponse(call: Call<ValuteInfo>, response: Response<ValuteInfo>) {
-                    storage.value = response.body()
-                }
-
-                override fun onFailure(call: Call<ValuteInfo>, t: Throwable) {
-                    Log.d(Log.DEBUG.toString(), t.message)
-                }
-        })
+    companion object {
+        val instance = Storage()
     }
 
 }
