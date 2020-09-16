@@ -1,0 +1,51 @@
+package com.example.currencyexchanger.view.valutes
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.currencyexchanger.presenter.valutes.MyAdapter
+import com.example.currencyexchanger.R
+import com.example.currencyexchanger.presenter.valutes.ValutesPresenter
+import com.example.currencyexchanger.presenter.valutes.ValutesPresenterInterface
+import kotlinx.android.synthetic.main.valutes_fragment.*
+
+class ValutesFragment: Fragment(), ValuteViewInterface {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var presenter: ValutesPresenterInterface
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.valutes_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        recyclerView = recycler_view
+        recyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
+        presenter = ValutesPresenter(this)
+    }
+
+    override fun getActivityLifecycle(): Lifecycle {
+        return lifecycle
+    }
+
+    override fun setAdapter(adapter: MyAdapter) {
+        recyclerView.adapter = adapter
+    }
+
+    override fun toString(): String {
+        return "Список"
+    }
+}

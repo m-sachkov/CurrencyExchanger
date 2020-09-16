@@ -5,4 +5,6 @@
     <string name="nominal">Единиц</string>
     <string name="name">Валюта</string>
     <string name="value">Курс</string>
+    <string name="first_tab">Список</string>
+    <string name="second_tab">Конвертер</string>
 </resources>
