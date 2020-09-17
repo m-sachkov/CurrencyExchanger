@@ -10,7 +10,7 @@ class Storage private constructor(){
 
     private var storage: ValuteInfo? = null
 
-    fun getData(): ValuteInfo? {
+    fun getData(): ValuteInfo {
         if (storage == null) {
             val deferred = GlobalScope.async {
                 NetworkService.instance
@@ -19,7 +19,7 @@ class Storage private constructor(){
             }
             storage = runBlocking { deferred.await() }
         }
-        return storage
+        return storage!!
     }
 
 

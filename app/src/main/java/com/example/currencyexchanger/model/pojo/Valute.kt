@@ -11,4 +11,8 @@ data class Valute(
     val name: String,
     @SerializedName("Value")
     val value: Double
-)
+) {
+    override fun toString(): String {
+        return "$charCode $name"
+    }
+}

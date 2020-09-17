@@ -9,7 +9,7 @@ class ValutesPresenter(valuteView: ValuteViewInterface): ValutesPresenterInterfa
     private val storage: Storage = Storage.instance
 
     init {
-        storage.getData()?.valutes?.let { adapter.setData(it) }
+        storage.getData().valutes.let { adapter.setData(it) }
         valuteView.setAdapter(adapter)
     }
 }

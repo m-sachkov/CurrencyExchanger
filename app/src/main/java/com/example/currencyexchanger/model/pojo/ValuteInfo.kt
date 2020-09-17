@@ -9,5 +9,5 @@ data class ValuteInfo (
     val date: String,
     @SerializedName("Valute")
     @Expose
-    val valutes: LinkedHashMap<String, Valute>
+    var valutes: LinkedHashMap<String, Valute>
 )
