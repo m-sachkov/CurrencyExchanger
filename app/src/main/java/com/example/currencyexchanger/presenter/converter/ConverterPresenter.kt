@@ -13,8 +13,8 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
 
     private val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy")
     private val module: Storage = Storage.instance
-    private lateinit var charCodeFrom: String
-    private lateinit var charCodeTo: String
+    private var charCodeFrom: String = "RUR"
+    private var charCodeTo: String = "USD"
 
     init {
         module.subscribeOnAutoUpdNotifications(this)
@@ -36,9 +36,9 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
             view.setDataToSpinners(spinnerStrings)
 
             view.setSelectionToSpinnerFrom(
-                spinnerStrings.indexOf(data.valutes["RUR"].toString()))
+                spinnerStrings.indexOf(data.valutes[charCodeFrom].toString()))
             view.setSelectionToSpinnerTo(
-                spinnerStrings.indexOf(data.valutes["USD"].toString()))
+                spinnerStrings.indexOf(data.valutes[charCodeTo].toString()))
         }
     }
 
@@ -75,10 +75,11 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
 
     private fun decFormat(value: Double) = "%.4f".format(value).replace(',', '.')
 
-    private fun getCharCodeFromStr(str: String): String = str.split(" ")[0]
+    private fun getCharCodeFromStr(str: String) = str.split(" ")[0]
 
     private fun convert(charCodeFrom: String, charCodeTo: String, convertValue: Double = 1.0) =
-        convert (module.getData().valutes[charCodeFrom]!!, module.getData().valutes[charCodeTo]!!, convertValue)
+        convert (module.getData().valutes[charCodeFrom]!!,
+            module.getData().valutes[charCodeTo]!!, convertValue)
 
     private fun convert(valuteFrom: Valute, valuteTo: Valute, convertValue: Double) =
         (valuteFrom.value / valuteFrom.nominal / valuteTo.value) * convertValue
