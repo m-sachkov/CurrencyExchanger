@@ -1,6 +1,5 @@
 package com.example.currencyexchanger.model.db
 
-import android.util.Log
 import androidx.room.TypeConverter
 import com.example.currencyexchanger.model.pojo.Valute
 import com.google.gson.Gson

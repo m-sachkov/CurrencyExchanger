@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.currencyexchanger.presenter.valutes.MyAdapter
 import com.example.currencyexchanger.R
+import com.example.currencyexchanger.presenter.valutes.MyAdapter
 import com.example.currencyexchanger.presenter.valutes.ValutesPresenter
 import com.example.currencyexchanger.presenter.valutes.ValutesPresenterInterface
 import kotlinx.android.synthetic.main.valutes_fragment.*

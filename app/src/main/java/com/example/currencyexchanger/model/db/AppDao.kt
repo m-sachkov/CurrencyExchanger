@@ -1,7 +1,9 @@
 package com.example.currencyexchanger.model.db
 
-import androidx.room.*
-import com.example.currencyexchanger.model.pojo.Valute
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.example.currencyexchanger.model.pojo.ValuteInfo
 
 @Dao
