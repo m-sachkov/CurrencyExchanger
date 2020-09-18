@@ -68,7 +68,7 @@ class ConverterFragment: Fragment(), ConverterViewInterface {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (!changeEditTextDataProgrammatically) {
-                presenter.convertNumFromView(s, view.id)
+                s?.let { presenter.convertNumFromView(it, view.id) }
             }
         }
 
