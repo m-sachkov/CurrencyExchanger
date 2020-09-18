@@ -16,7 +16,7 @@ import java.util.*
 class Storage private constructor(context: Context){
 
     private var storage: ValuteInfo? = null
-    private val timer: Timer = Timer(updateDataAutomatically(), 10 * 1000)
+    private val timer: Timer = Timer(Runnable { refreshData() }, 10 * 1000)
     private val listeners: LinkedList<AutoDataUpdateNotificationsListener> = LinkedList()
     private val localDBConnection: AppDB =
         Room.databaseBuilder(context, AppDB::class.java, "db").build()
@@ -58,23 +58,21 @@ class Storage private constructor(context: Context){
         .getAPI()
         .getActualValuteInfo()
 
-    private fun updateDataAutomatically() = Runnable {
-        refreshData()
+    fun notifyDataChangeListeners() {
         listeners.forEach{ it.onStorageAutomaticallyUpdated() }
     }
 
-    fun refreshData(): ValuteInfo? {
-        val deferred = GlobalScope.async {
+    public fun refreshData() {
+        GlobalScope.async {
             val actualData = loadActualValutesInfo()
             if (actualData != storage) {
                 localDBConnection
                     .appDao()
                     .update(actualData)
                 storage = actualData
+                notifyDataChangeListeners()
             }
-            storage
         }
-        return runBlocking { deferred.await() }
     }
 
     companion object {

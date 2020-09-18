@@ -7,4 +7,5 @@ interface ValuteViewInterface {
     fun getActivityLifecycle(): Lifecycle
     fun setAdapter(adapter: MyAdapter)
     fun displayTime(time: String)
+    fun displayDate(date: String)
 }

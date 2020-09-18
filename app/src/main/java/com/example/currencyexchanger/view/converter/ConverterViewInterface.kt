@@ -13,4 +13,5 @@ interface ConverterViewInterface {
     fun setSelectionToSpinnerTo(position: Int)
 
     fun getNumToConvert(): String
+    fun displayDate(date: String)
 }

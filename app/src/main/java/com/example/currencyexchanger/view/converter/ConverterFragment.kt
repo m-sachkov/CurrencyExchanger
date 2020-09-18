@@ -149,4 +149,8 @@ class ConverterFragment: Fragment(), ConverterViewInterface {
 
     override fun getNumToConvert() = numToConvert.text.toString()
 
+    override fun displayDate(date: String) {
+        this.date.text = date
+    }
+
 }

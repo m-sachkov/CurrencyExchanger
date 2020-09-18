@@ -5,15 +5,21 @@ import com.example.currencyexchanger.model.Storage
 import com.example.currencyexchanger.model.pojo.Valute
 import com.example.currencyexchanger.view.converter.ConverterViewInterface
 import kotlinx.coroutines.runBlocking
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
-class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterInterface {
+class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterInterface,
+    Storage.AutoDataUpdateNotificationsListener {
 
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy")
     private val module: Storage = Storage.instance
     private lateinit var charCodeFrom: String
     private lateinit var charCodeTo: String
 
     init {
+        module.subscribeOnAutoUpdNotifications(this)
         setDataToSpinners()
+        displayDate()
     }
 
     private fun setDataToSpinners() {
@@ -76,4 +82,13 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
 
     private fun convert(valuteFrom: Valute, valuteTo: Valute, convertValue: Double) =
         (valuteFrom.value / valuteFrom.nominal / valuteTo.value) * convertValue
+
+    override fun onStorageAutomaticallyUpdated() {
+        displayDate()
+    }
+
+    private fun displayDate() {
+        val date = module.getData().date
+        view.displayDate(ZonedDateTime.parse(date).format(dateFormatter))
+    }
 }

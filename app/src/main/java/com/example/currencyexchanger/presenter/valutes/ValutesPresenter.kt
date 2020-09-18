@@ -1,9 +1,14 @@
 package com.example.currencyexchanger.presenter.valutes
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.currencyexchanger.model.Storage
 import com.example.currencyexchanger.model.pojo.Valute
+import com.example.currencyexchanger.model.pojo.ValuteInfo
 import com.example.currencyexchanger.view.valutes.ValuteViewInterface
 import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
@@ -11,25 +16,30 @@ class ValutesPresenter(val valuteView: ValuteViewInterface): ValutesPresenterInt
 
     private val adapter: MyAdapter = MyAdapter(LinkedHashMap())
     private val storage: Storage = Storage.instance
-    private val timeFormatter =
-        SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT, SimpleDateFormat.MEDIUM)
+    private val timeFormatter = SimpleDateFormat("HH:mm:ss", Locale.US)
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy")
 
     init {
-        setAdapterData(storage.getData().valutes)
+        setData(storage.getData())
         valuteView.setAdapter(adapter)
         storage.subscribeOnAutoUpdNotifications(this)
     }
 
     override fun refreshData() {
-        setAdapterData(storage.refreshData()?.valutes)
+        storage.refreshData()
     }
 
-    private fun setAdapterData(data: LinkedHashMap<String, Valute>?) {
-        data?.let { adapter.setData(it) }
-        valuteView.displayTime(timeFormatter.format(Date(System.currentTimeMillis())))
+    private fun setData(data: ValuteInfo?) {
+        data?.let {
+            adapter.setData(it.valutes)
+            valuteView.displayDate(
+                ZonedDateTime.parse(it.date).format(dateFormatter))
+            valuteView.displayTime(
+                timeFormatter.format(Date(System.currentTimeMillis())))
+        }
     }
 
     override fun onStorageAutomaticallyUpdated() {
-        setAdapterData(storage.getData().valutes)
+        setData(storage.getData())
     }
 }
