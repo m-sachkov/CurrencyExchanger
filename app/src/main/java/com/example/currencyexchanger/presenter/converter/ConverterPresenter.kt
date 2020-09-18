@@ -18,7 +18,9 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
 
     private fun setDataToSpinners() {
         val data = module.getData()
-        data.valutes["RUR"] = Valute("RUR", 1, "Российский рубль", 1.0)
+        if (!data.valutes.containsKey("RUR")) {
+            data.valutes["RUR"] = Valute("RUR", 1, "Российский рубль", 1.0)
+        }
 
         val spinnerStrings = data.valutes.map {
                 entry -> entry.value.charCode + " " + entry.value.name

@@ -1,5 +1,6 @@
 package com.example.currencyexchanger.view.converter
 
+import android.content.Context
 import android.widget.SpinnerAdapter
 
 interface ConverterViewInterface {
