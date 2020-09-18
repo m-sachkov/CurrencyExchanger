@@ -1,20 +1,16 @@
 package com.example.currencyexchanger.model.pojo
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
 data class Valute(
-    @PrimaryKey
     @SerializedName("CharCode")
-    var charCode: String,
+    val charCode: String,
     @SerializedName("Nominal")
-    var nominal: Int,
+    val nominal: Int,
     @SerializedName("Name")
-    var name: String,
+    val name: String,
     @SerializedName("Value")
-    var value: Double
+    val value: Double
 ) {
     override fun toString(): String {
         return "$charCode $name"
