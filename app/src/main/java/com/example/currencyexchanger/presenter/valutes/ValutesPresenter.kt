@@ -1,6 +1,7 @@
 package com.example.currencyexchanger.presenter.valutes
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.currencyexchanger.model.Storage
 import com.example.currencyexchanger.model.pojo.Valute
@@ -27,6 +28,8 @@ class ValutesPresenter(val valuteView: ValuteViewInterface): ValutesPresenterInt
 
     override fun refreshData() {
         storage.refreshData()
+        Log.d("RE", "REFR1")
+
     }
 
     private fun setData(data: ValuteInfo?) {
@@ -40,6 +43,7 @@ class ValutesPresenter(val valuteView: ValuteViewInterface): ValutesPresenterInt
     }
 
     override fun onStorageAutomaticallyUpdated() {
+        Log.d("RE", "REFR")
         setData(storage.getData())
     }
 }

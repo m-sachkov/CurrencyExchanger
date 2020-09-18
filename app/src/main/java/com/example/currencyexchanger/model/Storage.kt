@@ -58,11 +58,11 @@ class Storage private constructor(context: Context){
         .getAPI()
         .getActualValuteInfo()
 
-    fun notifyDataChangeListeners() {
+    private fun notifyDataupdated() {
         listeners.forEach{ it.onStorageAutomaticallyUpdated() }
     }
 
-    public fun refreshData() {
+    fun refreshData() {
         GlobalScope.async {
             val actualData = loadActualValutesInfo()
             if (actualData != storage) {
@@ -70,8 +70,8 @@ class Storage private constructor(context: Context){
                     .appDao()
                     .update(actualData)
                 storage = actualData
-                notifyDataChangeListeners()
             }
+            notifyDataupdated()
         }
     }
 
