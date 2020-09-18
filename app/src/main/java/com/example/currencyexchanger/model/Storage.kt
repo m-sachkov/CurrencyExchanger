@@ -1,6 +1,7 @@
 package com.example.currencyexchanger.model
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 import com.example.currencyexchanger.App
 import com.example.currencyexchanger.model.db.AppDB
@@ -19,11 +20,12 @@ class Storage private constructor(context: Context){
     fun getData(): ValuteInfo {
         if (storage == null) {
             val deferred = GlobalScope.async {
-                val localData = localDBConnection.appDao().getValuteInfo()
+                val localData =
+                    localDBConnection
+                    .appDao()
+                    .getValuteInfo()
                 if (localData == null) {
-                    storage = NetworkService.instance
-                    .getAPI()
-                    .getActualValuteInfo()
+                    storage = loadActualValutesInfo()
                     storage?.let{ localDBConnection.appDao().insert(it) }
                 }
                 else {
@@ -35,6 +37,24 @@ class Storage private constructor(context: Context){
         return storage!!
     }
 
+    private suspend fun loadActualValutesInfo() =
+        NetworkService.instance
+        .getAPI()
+        .getActualValuteInfo()
+
+    fun refreshData(): ValuteInfo? {
+        val deferred = GlobalScope.async {
+            val actualData = loadActualValutesInfo()
+            if (actualData != storage) {
+                localDBConnection
+                    .appDao()
+                    .update(actualData)
+                storage = actualData
+            }
+            storage
+        }
+        return runBlocking { deferred.await() }
+    }
 
     companion object {
         val instance = Storage(App.getAppContext())

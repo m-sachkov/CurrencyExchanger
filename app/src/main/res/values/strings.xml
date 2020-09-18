@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CurrencyExchanger</string>
-    <string name="head_title">Официальные курсы валют ЦБ</string>
+    <string name="head_title">Официальные курсы валют ЦБ на </string>
     <string name="char_code">Букв.код</string>
     <string name="nominal">Единиц</string>
     <string name="name">Валюта</string>

@@ -14,6 +14,7 @@ import com.example.currencyexchanger.R
 import com.example.currencyexchanger.presenter.valutes.ValutesPresenter
 import com.example.currencyexchanger.presenter.valutes.ValutesPresenterInterface
 import kotlinx.android.synthetic.main.valutes_fragment.*
+import kotlinx.android.synthetic.main.valutes_fragment.view.*
 
 class ValutesFragment: Fragment(), ValuteViewInterface {
 
@@ -35,6 +36,8 @@ class ValutesFragment: Fragment(), ValuteViewInterface {
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         presenter = ValutesPresenter(this)
+
+        view.refresh_btn.setOnClickListener { presenter.refreshData() }
     }
 
     override fun getActivityLifecycle(): Lifecycle {
