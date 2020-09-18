@@ -16,7 +16,7 @@ import java.util.*
 class Storage private constructor(context: Context){
 
     private var storage: ValuteInfo? = null
-    private val timer: Timer = Timer(Runnable { refreshData() }, 10 * 1000)
+    private val timer: Timer = Timer(Runnable { refreshData() }, 5 * 60000)
     private val listeners: LinkedList<AutoDataUpdateNotificationsListener> = LinkedList()
     private val localDBConnection: AppDB =
         Room.databaseBuilder(context, AppDB::class.java, "db").build()
