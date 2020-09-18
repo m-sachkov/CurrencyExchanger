@@ -1,13 +1,14 @@
 package com.example.currencyexchanger.model.pojo
 
-import com.google.gson.annotations.Expose
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity
 data class ValuteInfo (
+    @PrimaryKey
     @SerializedName("Date")
-    @Expose
-    val date: String,
+    var date: String,
     @SerializedName("Valute")
-    @Expose
     var valutes: LinkedHashMap<String, Valute>
 )

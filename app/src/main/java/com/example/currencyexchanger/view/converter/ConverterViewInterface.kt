@@ -1,7 +1,5 @@
 package com.example.currencyexchanger.view.converter
 
-import android.widget.SpinnerAdapter
-
 interface ConverterViewInterface {
     fun setRateFrom(str: String)
     fun setRateTo(str: String)
