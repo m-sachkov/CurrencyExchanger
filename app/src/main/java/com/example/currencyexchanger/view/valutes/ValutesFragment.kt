@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,6 +21,7 @@ class ValutesFragment: Fragment(), ValuteViewInterface {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var presenter: ValutesPresenterInterface
+    private lateinit var lastUpdateTime: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +36,7 @@ class ValutesFragment: Fragment(), ValuteViewInterface {
         recyclerView.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        lastUpdateTime = view.lastUpdateTimeFiled
 
         presenter = ValutesPresenter(this)
 
@@ -46,6 +49,10 @@ class ValutesFragment: Fragment(), ValuteViewInterface {
 
     override fun setAdapter(adapter: MyAdapter) {
         recyclerView.adapter = adapter
+    }
+
+    override fun displayTime(time: String) {
+        lastUpdateTime.text = time
     }
 
     override fun toString(): String {

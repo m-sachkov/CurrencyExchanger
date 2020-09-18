@@ -7,4 +7,5 @@
     <string name="value">Курс</string>
     <string name="first_tab">Список</string>
     <string name="second_tab">Конвертер</string>
+    <string name="lastTimeUpdate">Последнее обновление: </string>
 </resources>

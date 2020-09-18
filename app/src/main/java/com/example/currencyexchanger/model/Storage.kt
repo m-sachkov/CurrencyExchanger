@@ -1,7 +1,8 @@
 package com.example.currencyexchanger.model
 
 import android.content.Context
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import androidx.room.Room
 import com.example.currencyexchanger.App
 import com.example.currencyexchanger.model.db.AppDB
@@ -10,12 +11,27 @@ import com.example.currencyexchanger.model.pojo.ValuteInfo
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import java.util.*
 
 class Storage private constructor(context: Context){
 
     private var storage: ValuteInfo? = null
+    private val timer: Timer = Timer(updateDataAutomatically(), 10 * 1000)
+    private val listeners: LinkedList<AutoDataUpdateNotificationsListener> = LinkedList()
     private val localDBConnection: AppDB =
         Room.databaseBuilder(context, AppDB::class.java, "db").build()
+
+    init {
+        timer.start()
+    }
+
+    fun subscribeOnAutoUpdNotifications(listener: AutoDataUpdateNotificationsListener) {
+        listeners.add(listener)
+    }
+
+    interface AutoDataUpdateNotificationsListener {
+        fun onStorageAutomaticallyUpdated()
+    }
 
     fun getData(): ValuteInfo {
         if (storage == null) {
@@ -42,6 +58,11 @@ class Storage private constructor(context: Context){
         .getAPI()
         .getActualValuteInfo()
 
+    private fun updateDataAutomatically() = Runnable {
+        refreshData()
+        listeners.forEach{ it.onStorageAutomaticallyUpdated() }
+    }
+
     fun refreshData(): ValuteInfo? {
         val deferred = GlobalScope.async {
             val actualData = loadActualValutesInfo()
@@ -60,4 +81,27 @@ class Storage private constructor(context: Context){
         val instance = Storage(App.getAppContext())
     }
 
+    class Timer(val task: Runnable, val interval: Long) {
+
+        private val handler = Handler(Looper.getMainLooper())
+        private var isStopped = true
+
+        private val mainTask = object : Runnable{
+            override fun run() {
+                if (!isStopped) {
+                    task.run()
+                    handler.postDelayed(this, interval)
+                }
+            }
+        }
+
+        fun start() {
+            isStopped = false
+            handler.postDelayed(mainTask, interval)
+        }
+
+        fun stop() {
+            isStopped = true
+        }
+    }
 }

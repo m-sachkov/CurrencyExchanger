@@ -6,4 +6,5 @@ import com.example.currencyexchanger.presenter.valutes.MyAdapter
 interface ValuteViewInterface {
     fun getActivityLifecycle(): Lifecycle
     fun setAdapter(adapter: MyAdapter)
+    fun displayTime(time: String)
 }
