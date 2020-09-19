@@ -13,7 +13,6 @@ class DBConverter {
         @TypeConverter @JvmStatic
         fun fromMap(data: LinkedHashMap<String, Valute>): String {
             val gson = Gson()
-            val res = gson.toJson(data)
             return gson.toJson(data)
         }
 

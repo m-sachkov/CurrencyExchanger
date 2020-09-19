@@ -6,9 +6,17 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class ValuteInfo (
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    var id: Int,
     @SerializedName("Date")
     var date: String,
     @SerializedName("Valute")
     var valutes: LinkedHashMap<String, Valute>
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other is ValuteInfo) {
+            return date == other.date && valutes == other.valutes
+        }
+        return false
+    }
+}

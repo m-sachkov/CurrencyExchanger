@@ -19,7 +19,9 @@ class Storage private constructor(context: Context){
     private val timer: Timer = Timer(Runnable { refreshData() }, 5 * 60000)
     private val listeners: LinkedList<AutoDataUpdateNotificationsListener> = LinkedList()
     private val localDBConnection: AppDB =
-        Room.databaseBuilder(context, AppDB::class.java, "db").build()
+        Room.databaseBuilder(context, AppDB::class.java, "db")
+            .fallbackToDestructiveMigration()
+            .build()
 
     init {
         timer.start()
@@ -95,7 +97,7 @@ class Storage private constructor(context: Context){
 
         fun start() {
             isStopped = false
-            handler.postDelayed(mainTask, interval)
+            handler.postDelayed(mainTask, 0)
         }
 
         fun stop() {
