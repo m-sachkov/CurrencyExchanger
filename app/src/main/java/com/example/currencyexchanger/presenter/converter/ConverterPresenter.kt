@@ -3,6 +3,7 @@ package com.example.currencyexchanger.presenter.converter
 import com.example.currencyexchanger.R
 import com.example.currencyexchanger.model.Storage
 import com.example.currencyexchanger.model.pojo.Valute
+import com.example.currencyexchanger.model.pojo.ValuteInfo
 import com.example.currencyexchanger.view.converter.ConverterViewInterface
 import kotlinx.coroutines.runBlocking
 import java.time.ZonedDateTime
@@ -22,12 +23,16 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
         displayDate()
     }
 
-    private fun setDataToSpinners() {
+    private fun getStorageData(): ValuteInfo {
         val data = module.getData()
         if (!data.valutes.containsKey("RUR")) {
             data.valutes["RUR"] = Valute("RUR", 1, "Российский рубль", 1.0)
         }
+        return data
+    }
 
+    private fun setDataToSpinners() {
+        val data = getStorageData()
         val spinnerStrings = data.valutes.map {
                 entry -> entry.value.charCode + " " + entry.value.name
         }.toMutableList()
@@ -73,8 +78,8 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
     private fun getCharCodeFromStr(str: String) = str.split(" ")[0]
 
     private fun convert(charCodeFrom: String, charCodeTo: String, convertValue: Double = 1.0): Double {
-        val valute1 = module.getData().valutes[charCodeFrom]
-        val valute2 = module.getData().valutes[charCodeTo]
+        val valute1 = getStorageData().valutes[charCodeFrom]
+        val valute2 = getStorageData().valutes[charCodeTo]
         if (valute1 == null || valute2 == null) {
             return 0.0
         }
@@ -89,7 +94,7 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
     }
 
     private fun displayDate() {
-        val date = module.getData().date
+        val date = getStorageData().date
         view.displayDate(ZonedDateTime.parse(date).format(dateFormatter))
     }
 }

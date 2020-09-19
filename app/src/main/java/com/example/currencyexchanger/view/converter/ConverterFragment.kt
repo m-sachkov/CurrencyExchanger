@@ -1,18 +1,23 @@
 package com.example.currencyexchanger.view.converter
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.currencyexchanger.R
 import com.example.currencyexchanger.presenter.converter.ConverterPresenter
 import com.example.currencyexchanger.presenter.converter.ConverterPresenterInterface
 import kotlinx.android.synthetic.main.converter_fragment.view.*
+
 
 class ConverterFragment: Fragment(), ConverterViewInterface {
 
@@ -25,6 +30,7 @@ class ConverterFragment: Fragment(), ConverterViewInterface {
     private lateinit var date: TextView
     private lateinit var bufferedContext: Context
 
+    private lateinit var imm: InputMethodManager
     private var changeSpinnerSelectionProgrammatically = false
     private var changeEditTextDataProgrammatically = false
 
@@ -56,6 +62,8 @@ class ConverterFragment: Fragment(), ConverterViewInterface {
         numToConvert.setOnFocusChangeListener { v, hasFocus -> editTextFocusChanged(v, hasFocus) }
         convertedNum.setOnFocusChangeListener { v, hasFocus -> editTextFocusChanged(v, hasFocus) }
 
+        imm = context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+
         view.reverse_btn.setOnClickListener {
             val t = valutesFrom.selectedItemPosition
             setSelectionToSpinnerFrom(valutesTo.selectedItemPosition)
@@ -63,6 +71,12 @@ class ConverterFragment: Fragment(), ConverterViewInterface {
 
             presenter.newValuteSelected()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        numToConvert.requestFocus()
     }
 
     private fun editTextFocusChanged(view: View, hasFocus: Boolean) {
