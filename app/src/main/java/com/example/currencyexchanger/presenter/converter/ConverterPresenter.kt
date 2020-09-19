@@ -1,5 +1,6 @@
 package com.example.currencyexchanger.presenter.converter
 
+import android.util.Log
 import com.example.currencyexchanger.R
 import com.example.currencyexchanger.model.Storage
 import com.example.currencyexchanger.model.pojo.Valute
@@ -24,7 +25,7 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
     }
 
     private fun getStorageData(): ValuteInfo {
-        val data = module.getData().copy()
+        val data = module.getData().getCopy()
         if (!data.valutes.containsKey("RUR")) {
             data.valutes["RUR"] = Valute("RUR", 1, "Российский рубль", 1.0)
         }

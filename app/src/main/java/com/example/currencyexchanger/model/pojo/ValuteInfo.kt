@@ -19,4 +19,8 @@ data class ValuteInfo (
         }
         return false
     }
+
+    fun getCopy(): ValuteInfo {
+        return ValuteInfo(id, date, valutes.clone() as LinkedHashMap<String, Valute>)
+    }
 }
