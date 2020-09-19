@@ -24,7 +24,7 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
     }
 
     private fun getStorageData(): ValuteInfo {
-        val data = module.getData()
+        val data = module.getData().copy()
         if (!data.valutes.containsKey("RUR")) {
             data.valutes["RUR"] = Valute("RUR", 1, "Российский рубль", 1.0)
         }
