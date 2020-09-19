@@ -59,17 +59,12 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
         strWithNum?.toString().run {
             val num = if (this!!.isEmpty()) 0.0 else this.toDouble()
 
-            val result: Double
+            var result = 0.0
             when (viewId) {
-                R.id.num_to_convert -> {
-                    result = convert(charCodeFrom, charCodeTo, num)
-                    view.setConvertedNum(decFormat(result))
-                }
-                R.id.num_converted -> {
-                    result = convert(charCodeTo, charCodeFrom, num)
-                    view.setNumToConvert(decFormat(result))
-                }
+                R.id.num_to_convert -> result = convert(charCodeFrom, charCodeTo, num)
+                R.id.num_converted -> result = convert(charCodeTo, charCodeFrom, num)
             }
+            view.setNumToOppositeEditText(viewId, if (result == 0.0) "" else decFormat(result))
         }
     }
 
@@ -77,9 +72,14 @@ class ConverterPresenter(val view: ConverterViewInterface): ConverterPresenterIn
 
     private fun getCharCodeFromStr(str: String) = str.split(" ")[0]
 
-    private fun convert(charCodeFrom: String, charCodeTo: String, convertValue: Double = 1.0) =
-        convert (module.getData().valutes[charCodeFrom]!!,
-            module.getData().valutes[charCodeTo]!!, convertValue)
+    private fun convert(charCodeFrom: String, charCodeTo: String, convertValue: Double = 1.0): Double {
+        val valute1 = module.getData().valutes[charCodeFrom]
+        val valute2 = module.getData().valutes[charCodeTo]
+        if (valute1 == null || valute2 == null) {
+            return 0.0
+        }
+        return convert(valute1, valute2, convertValue)
+    }
 
     private fun convert(valuteFrom: Valute, valuteTo: Valute, convertValue: Double) =
         (valuteFrom.value / valuteFrom.nominal / valuteTo.value) * convertValue

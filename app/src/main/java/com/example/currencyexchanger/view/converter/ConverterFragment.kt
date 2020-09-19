@@ -53,6 +53,8 @@ class ConverterFragment: Fragment(), ConverterViewInterface {
 
         numToConvert.addTextChangedListener(textWatcherWithView(numToConvert))
         convertedNum.addTextChangedListener(textWatcherWithView(convertedNum))
+        numToConvert.setOnFocusChangeListener { v, hasFocus -> editTextFocusChanged(v, hasFocus) }
+        convertedNum.setOnFocusChangeListener { v, hasFocus -> editTextFocusChanged(v, hasFocus) }
 
         view.reverse_btn.setOnClickListener {
             val t = valutesFrom.selectedItemPosition
@@ -60,6 +62,13 @@ class ConverterFragment: Fragment(), ConverterViewInterface {
             setSelectionToSpinnerTo(t)
 
             presenter.newValuteSelected()
+        }
+    }
+
+    private fun editTextFocusChanged(view: View, hasFocus: Boolean) {
+        if (view is EditText && !hasFocus) {
+            val text = view.text.toString()
+            if(text.isNotEmpty() && text.toDouble() == 0.0) view.setText("")
         }
     }
 
@@ -104,17 +113,12 @@ class ConverterFragment: Fragment(), ConverterViewInterface {
         rateTo.text = str
     }
 
-    override fun setConvertedNum(str: String) {
-        setTextToEditText(convertedNum, str)
-    }
-
-    override fun setNumToConvert(str: String) {
-        setTextToEditText(numToConvert, str)
-    }
-
-    private fun setTextToEditText(editText: EditText, str: String) {
+    override fun setNumToOppositeEditText(editTextId: Int, str: String) {
         changeEditTextDataProgrammatically = true
-        editText.setText(str)
+        when (editTextId) {
+            R.id.num_to_convert -> convertedNum.setText(str)
+            R.id.num_converted -> numToConvert.setText(str)
+        }
         changeEditTextDataProgrammatically = false
     }
 
