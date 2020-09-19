@@ -8,4 +8,8 @@
     <string name="first_tab">Список</string>
     <string name="second_tab">Конвертер</string>
     <string name="lastTimeUpdate">Последнее обновление: </string>
+    <string name="enter_num">Введите число</string>
+    <string name="want_to_have">Хочу приобрести</string>
+    <string name="already_have">У меня есть</string>
+    <string name="current_date">Курс актуален на:</string>
 </resources>
